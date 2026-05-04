@@ -1,5 +1,5 @@
-import os
-from dotenv import load_dotenv
+import os # para comunicarse con el sistema operativo
+from dotenv import load_dotenv # para cargar el .env
 
 load_dotenv()
 
