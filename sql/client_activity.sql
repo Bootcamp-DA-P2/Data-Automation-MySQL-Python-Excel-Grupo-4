@@ -1,23 +1,29 @@
--- 1. Crear el usuario
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
-
--- 2. Darle todos los permisos para que pueda crear bases de datos y tablas
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
-
--- 3. Refrescar los permisos
-FLUSH PRIVILEGES;
-
 use sakila;
 
-Select country.country_id, country.country, country.last_update, city_id, city, address_id, address, address2, district, postal_code, phone, location, customer_id, firt_name, last_name, email, customer.active, create_date
-from country
-join 
-city on country.country_id = city.country_id
-join
-address on address.city_id = city.city_id
-join
-customer on customer.address_id = customer.address_id;
-
-
-
-
+select
+	LOWER(cu.first_name) AS firt_name,
+	LOWER(cu.last_name) AS last_name,
+	LOWER(cu.email) AS email,
+	cu.active,
+	LOWER(ad.address) AS address,
+	LOWER(ad.district) AS district,
+	ad.postal_code, 
+	ad.phone,
+    LOWER(ci.city) AS city,
+    LOWER(co.country) AS country,
+    re.rental_date,
+    re.return_date,
+    pa.amount,
+    pa.payment_date,
+    DATEDIFF(re.return_date, re.rental_date) AS rental_duration
+from customer cu
+join address ad on cu.address_id = ad.address_id
+join city ci on ci.city_id = ad.city_id
+join country co on ci.country_id = co.country_id
+join rental re on cu.customer_id = re.customer_id
+join payment pa on re.rental_id = pa.rental_id
+WHERE
+    rental_date IS NOT NULL
+    AND return_date IS NOT NULL
+    AND amount > 0
+    AND rental_date < return_date;
