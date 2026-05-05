@@ -39,7 +39,7 @@ def get_data_list_from_join_activity_clients():
                                 cu.active,
                                 LOWER(ad.address) AS address,
                                 LOWER(ad.district) AS district,
-                                ad.postal_code, 
+                                ad.postal_code,
                                 ad.phone,
                                 LOWER(ci.city) AS city,
                                 LOWER(co.country) AS country,
@@ -80,7 +80,7 @@ def get_data_list_from_join_activity_clients():
                 encoding='utf-8' # Asegura que caracteres especiales (como acentos) se guarden bien
         )
 
-        print(f"✅ DataFrame successfully created and saved to: {'data/sakila.csv'}")
+        print(f"✅ DataFrame successfully created and saved to: {'data/sakila-client-activity.csv'}")
 
         return df
         
