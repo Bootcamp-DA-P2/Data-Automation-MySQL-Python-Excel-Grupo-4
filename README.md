@@ -68,14 +68,49 @@ En **Google Colab**, se realizó el tratamiento final de los datos:
 
 ---
 
+### 🛠️ Ingeniería de Características (Feature Engineering)
+
+Para enriquecer el análisis y permitir un estudio más detallado de los patrones de consumo, se han realizado diversas transformaciones y derivaciones de datos:
+
+#### 👤 Información de Identidad
+* **`full_name`**: Consolidación de los campos de nombre y apellido en una única variable, mejorando la legibilidad de los reportes y visualizaciones.
+
+#### 📅 Extracción y Desglose Temporal
+A partir de las columnas originales de fecha (`rental_date` y `return_date`), se han descompuesto los siguientes atributos para análisis granulares:
+* **Componentes Cronológicos**: Creación de columnas específicas para **Día, Mes, Año y Hora**, tanto para el momento del alquiler como para la devolución.
+* **`day_of_week_rental`**: Identificación del día de la semana (donde 1 es Lunes y 7 es Domingo).
+* **`is_weekend_rental`**: Variable binaria (1/0) que clasifica si el alquiler ocurrió en fin de semana, permitiendo comparar el volumen de negocio entre días laborables y festivos.
+
+#### 🌡️ Segmentación por Estacionalidad y Franjas Horarias
+* **`season`**: Clasificación de los registros según la estación del año. 
+  > **Nota de Análisis**: Tras explorar los datos, se observa que la actividad en Sakila se concentra exclusivamente entre los meses de mayo y agosto (Primavera y Verano), por lo que no se encontrarán registros de Otoño o Invierno en este dataset específico.
+* **`rental_hour_part_of_the_day`** y **`return_hour_part_of_the_day`**: Categorización de las horas en tres franjas principales para identificar picos de afluencia:
+  * **Mañana**: 07:00 - 12:59
+  * **Tarde**: 13:00 - 23:59
+  * **Noche**: 00:00 - 06:59
+
+#### 🧹 Optimización y Limpieza de Columnas
+
+Una vez extraída la información necesaria, se procedió a eliminar las columnas originales (`first_name`, `last_name`, `rental_date`, `return_date`) para reducir la redundancia.
+
 ## 🧠 Decisiones Tomadas
+
 *Se ha priorizado el mantenimiento de la integridad referencial durante los JOINS.
 Con los valores nulos hemos procedido a relizar una imputación a (`missing`).
 En el caso de los outliers, se decidió mantenerlos ya que el dataframe solamente presentaba 4 valores outliers. Estas decisiones han sido tomadas basándonos en el conocimiento del dominio de los datos de Sakila.*
 
 ---
+
 ## 📊 Gráficas Relevantes
-*Qué graficas hemos realizado*
+Hemos realizado 5 gráficas en la que:
+1.  **Gráfica de alquileres por año:** Visualización de la tendecnia  de alquileres de película por año. Aquí no es hemos dado cuenta que solamente poseemos registros del año 2015
+2.  **Gráfica alquires por hora del día:** Histograma de distribución de alquileres de película por hora del día.
+3.  **Gráfica alquires por día de la semana y temporada:** Countplot de distribución de alquileres de película por día de la semana que se alquila y temporada del año.
+4.  **Gráfica alquires por mes del año:** Countplor de distribución de alquileres por mes del año. Aquí nos hemos dado cuenta que solamente tenemos registros de los meses que van desde Mayo a Agosto
+5.  **Gráfica usuarios con más alquileres:** Barplot de los Top 5 clientes con más alquileres.
+
+
+
 
 ---
 **Desarrollado por:** Ana Ganfornina y Daniel Luque
