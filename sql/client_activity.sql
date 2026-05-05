@@ -1,7 +1,7 @@
 use sakila;
 
 select
-	LOWER(cu.first_name) AS firt_name,
+	LOWER(cu.first_name) AS first_name,
 	LOWER(cu.last_name) AS last_name,
 	LOWER(cu.email) AS email,
 	cu.active,
