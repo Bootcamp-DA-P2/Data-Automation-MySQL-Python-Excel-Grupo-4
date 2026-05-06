@@ -114,3 +114,4 @@ Hemos realizado 5 gráficas en la que:
 
 **Desarrollado por:** Ana Ganfornina y Daniel Luque
 **Plazo de entrega:** 1 semana
+**Enlace Tablero Figma:** (https://www.figma.com/board/5GEmJWY33xlKvXMoCRfXxC/Flujo-de-datos-de-SQL-a-Python?node-id=0-1&p=f&t=vFISDLJqBQYrApjw-0)
