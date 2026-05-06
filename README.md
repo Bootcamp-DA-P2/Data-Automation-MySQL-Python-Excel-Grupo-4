@@ -96,7 +96,8 @@ Una vez extraída la información necesaria, se procedió a eliminar las columna
 ## 🧠 Decisiones Tomadas
 
 *Se ha priorizado el mantenimiento de la integridad referencial durante los JOINS.
-Con los valores nulos hemos procedido a relizar una imputación a (`missing`).
+
+Con los valores de la columna `district` hemos intentando realizar una imputación por la moda, haciendo una agrupación por `city`, `postal_code` y `country`. Con el resto de valores nulos hemos procedido a relizar una imputación a (`missing`).
 En el caso de los outliers, se decidió mantenerlos ya que el dataframe solamente presentaba 4 valores outliers. Estas decisiones han sido tomadas basándonos en el conocimiento del dominio de los datos de Sakila.*
 
 ---
@@ -109,9 +110,7 @@ Hemos realizado 5 gráficas en la que:
 4.  **Gráfica alquires por mes del año:** Countplor de distribución de alquileres por mes del año. Aquí nos hemos dado cuenta que solamente tenemos registros de los meses que van desde Mayo a Agosto
 5.  **Gráfica usuarios con más alquileres:** Barplot de los Top 5 clientes con más alquileres.
 
-
-
-
 ---
+
 **Desarrollado por:** Ana Ganfornina y Daniel Luque
 **Plazo de entrega:** 1 semana
