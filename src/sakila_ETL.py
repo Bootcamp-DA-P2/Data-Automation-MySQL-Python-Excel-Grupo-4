@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, text
-from config import *
+from src.config import *
 import pandas as pd
 
 
@@ -37,7 +37,6 @@ query_sql_1 = """
             """
 
 sql_query_2 = """
-                USE sakila;
                 SELECT 
                     LOWER(TRIM(film.title)) AS title,
                     LOWER(TRIM(cat.name)) AS category,
@@ -62,11 +61,9 @@ sql_query_2 = """
 """
 
 sql_query_3 = """
-    use sakila;
-
     select
         lower(fi.title) 'Title',
-        ower(fi.description) 'Description',
+        lower(fi.description) 'Description',
         fi.release_year,
         fi.rating,
         lower(ca.name) as 'Category',
@@ -120,8 +117,8 @@ def test_connection():
 
 def get_execute_queries(queries, paths):
     conection = conection_bd()
-    for i, query in enumerate(queries):
-        with conection:
+    with conection:
+        for i, query in enumerate(queries):
             result = conection.execute(text(query))
             rows = result.fetchall()
             columns = result.keys()
