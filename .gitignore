@@ -11,7 +11,7 @@ __pycache__/
 *.pyc
 
 # Data package
-data/
+output/
 
 # Distribution / packaging
 .Python
