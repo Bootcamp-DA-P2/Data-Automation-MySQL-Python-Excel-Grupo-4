@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime as dt
+from cleaning_methods import *
 
 
 from cleaning_methods import normalize_string_columns, normalize_date_columns, delete_columns, load_clean_data
@@ -57,3 +58,29 @@ def preprocess_first_df(df):
         df[column] = df[column].fillna("missing")
 
     load_clean_data(df, '../output/client-activity-clean.csv')
+
+
+
+def preprocess_second_df(path):
+    #Carga de datos
+    df_original = charge_path(path)
+    df = df_original.copy()
+
+   # Normalización a tipo fecha y string
+    normalize_date_columns(df)
+    normalize_string_columns(df)
+
+    # Eliminación de columnas innecesarias
+    delete_columns(df, ['language'])
+
+    #Identificación de nulos
+    identify_nulls(df)
+
+    #Identificación de otulaiers
+    columns_numeric = df.select_dtypes("number").columns
+    columns_categorical = df.select_dtypes("object").columns
+
+    identify_outliers(df, columns_numeric, columns_categorical)
+   
+   #Exportación de datos limpios
+    load_clean_data(df, '../output/catalog_film_clean.csv')
