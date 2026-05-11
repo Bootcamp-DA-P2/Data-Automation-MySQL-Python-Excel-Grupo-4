@@ -65,17 +65,24 @@ def delete_columns(df, columns_to_delete):
     return df
 
 
-def delete_nulls(df):
+def identify_nulls(df):
     """
-    Eliminar filas con valores nulos en columnas específicas.
+    Identificar valores nulos en el dataframe.
     """
     print("--------------------------------")
-    print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
+    nuls = df.isnull().sum().sum()
+
+    if nuls == 0:
+        print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
+    else:
+        print(f"Se encontraron {nuls} valores nulos.")
 
 
 def identify_outliers(df, variables_numericas, variables_categoricas):
     """
     Identificación de valores atípicos en columnas numéricas utilizando el método del rango intercuartílico (IQR).
+    number_columns: array de columnas numéricas
+    categorical_columns: array de columnas categóricas
     """
     for col in variables_numericas:
         plt.figure(figsize=(8,4))
@@ -102,22 +109,6 @@ def identify_outliers(df, variables_numericas, variables_categoricas):
 
 def load_clean_data(df, path):
     df.to_csv(path, index=False)
-
-# Función de limpieza para el segundo dataframe
-def preprocess_df(path):
-    """
-    Función de limpieza para el segundo dataframe: carga del dataset, visualización inicial, normalización, eliminación de filas con valores nulos.
-    """
-    df = charge_path(path)
-    first_visualizer(df)
-    normalize_string_columns(df)
-    normalize_date_columns(df)
-    delete_nulls(df)
-    identify_outliers(df)
-
-    return df
-    
-
 
 def preprocess_first_df(df):
     # Normalización strings
