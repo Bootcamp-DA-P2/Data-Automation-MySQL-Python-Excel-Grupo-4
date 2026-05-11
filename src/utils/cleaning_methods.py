@@ -49,6 +49,8 @@ def normalize_string_columns(df):
     print(df.info())
 
 def normalize_date_columns(df):
+    """
+    Normalización de las columnas de tipo fecha: convertir a formato datetime."""
     
     column_date = df.filter(like='date').columns
     for column in column_date:
@@ -64,7 +66,9 @@ def delete_nulls(df):
 
 # Función de limpieza para el segundo dataframe
 def preprocess_df(path):
-
+    """
+    Función de limpieza para el segundo dataframe: carga del dataset, visualización inicial, normalización, eliminación de filas con valores nulos.
+    """
     df = charge_path(path)
     first_visualizer(df)
     normalize_string_columns(df)
