@@ -1,6 +1,7 @@
+import pandas as pd
 def preprocess_first_df(df):
     # Normalización strings
-	colum_str = ['first_name', 'last_name','email','address','district','city','country']
+    colum_str = ['first_name', 'last_name','email','address','district','city','country']
     for column in colum_str:
         df[column] = df[column].astype("string").str.lower().str.strip() #limpiamos las columnas a minusculas y eliminando también espacios
         df[column] = df[column].str.replace(r'[^a-zA-Z0-9 @]', '',regex=True)
@@ -58,4 +59,4 @@ def preprocess_first_df(df):
     for column in columns_str:
         df[column] = df[column].fillna("missing")
 
-    df_transformed.to_csv('../output/sakila-client-activity-tratado.csv', index=False)
+    df.to_csv('../output/sakila-client-activity-tratado.csv', index=False)
