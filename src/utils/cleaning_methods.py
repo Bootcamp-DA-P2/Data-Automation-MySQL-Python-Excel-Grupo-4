@@ -1,4 +1,47 @@
 import pandas as pd
+
+#charge the path
+def charge_path(path):
+    df = pd.read_csv(path)
+    return df
+
+def first_visualizer(df):
+    # Visualización de las primeras filas del dataframe
+    print(df.head())
+    # Visualización del tamaño del dataframe
+    print(f'El dataset tiene {df.shape[1]} columnas')
+    print(f'El dataset tiene {df.shape[0]} filas/registros')
+    print("-------------------------------")
+    print(f'El dataset tiene {df.duplicated().sum()} filas duplicadas.')
+    print("-------------------------------")
+    # Suma de valores nulos por columna
+    print("Suma de valores nulos por columna:")
+    print(df.isnull().sum())
+    print("-------------------------------")
+    # Porcentaje de valores nulos por columna
+    print("Porcentaje de valores nulos por columna:")
+    print(round(df.isnull().sum() * 100 / len(df),2))
+    print("-------------------------------")
+    # Tipos de datos de cada columna
+    print("Tipos de datos de cada columna:")   
+    print(df.info())
+    print("-------------------------------")
+    # Estadísticas descriptivas para columnas numéricas
+    print("Estadísticas descriptivas para columnas numéricas:")
+    print(df.describe())
+    print("-------------------------------")
+    # Estadísticas descriptivas para columnas categóricas
+    print("Estadísticas descriptivas para columnas categóricas:")
+    print(df.describe(include='object'))
+
+
+# Función de lipieza para el segundo dataframe
+def preprocess_df(path):
+
+    df = charge_path(path)
+    first_visualizer(df)
+
+
 def preprocess_first_df(df):
     # Normalización strings
     colum_str = ['first_name', 'last_name','email','address','district','city','country']
