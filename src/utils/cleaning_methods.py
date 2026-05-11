@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 #charge the path
 def charge_path(path):
@@ -58,31 +59,38 @@ def normalize_date_columns(df):
         df[column] = pd.to_datetime(df[column])
 
 
-def delete_nulls(df):
+def identify_nulls(df):
     """
-    Eliminar filas con valores nulos en columnas específicas.
+    Identificar valores nulos en el dataframe.
     """
     print("--------------------------------")
-    print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
+    nuls = df.isnull().sum().sum()
+
+    if nuls == 0:
+        print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
+    else:
+        print(f"Se encontraron {nuls} valores nulos.")
 
 
-def identify_outliers(df):
+def identify_outliers(df, number_columns, categorical_columns):
     """
     Identificación de valores atípicos en columnas numéricas utilizando el método del rango intercuartílico (IQR).
+    number_columns: array de columnas numéricas
+    categorical_columns: array de columnas categóricas
     """
     print("Identificación de valores atípicos en columnas numéricas:")
-    numeric_columns = df.select_dtypes(include=['number']).columns
-    for column in numeric_columns:
+    
+    for column in number_columns:
         Q1 = df[column].quantile(0.25)
         Q3 = df[column].quantile(0.75)
         IQR = Q3 - Q1
         lower_bound = Q1 - 1.5 * IQR
         upper_bound = Q3 + 1.5 * IQR
-        outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+        outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)] 
         print(f"Columna: {column}, Número de outliers: {outliers.shape[0]}")
 
-    # Visualización de histogramas y boxplots para cada columna numérica
-    for column in numeric_columns:
+        # Visualización de histogramas y boxplots para cada columna numérica
+    
         plt.figure(figsize=(10, 5))
         plt.hist(df[column], bins=15, edgecolor='black')
         plt.title(f'Histogram column: {column}')
@@ -92,20 +100,14 @@ def identify_outliers(df):
 
         plt.boxplot(df[column], orientation='horizontal')
         plt.title(f'Boxplot column: {column}')
-
-# Función de limpieza para el segundo dataframe
-def preprocess_df(path):
-    """
-    Función de limpieza para el segundo dataframe: carga del dataset, visualización inicial, normalización, eliminación de filas con valores nulos.
-    """
-    df = charge_path(path)
-    first_visualizer(df)
-    normalize_string_columns(df)
-    normalize_date_columns(df)
-    delete_nulls(df)
-    identify_outliers(df)
-
-    return df
+        plt.show()
+   
+    # Visualización de countplots para cada columna categórica
+    for column in categorical_columns:
+        plt.figure(figsize=(10,6))
+        sns.countplot(data=df, x=column)
+        plt.title(f'Countplot column: {column}')
+        plt.show()
     
 
 
