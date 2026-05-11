@@ -1,4 +1,114 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+
+#charge the path
+def charge_path(path):
+    df = pd.read_csv(path)
+    return df
+
+def first_visualizer(df):
+    # Visualización de las primeras filas del dataframe
+    print(df.head())
+    # Visualización del tamaño del dataframe
+    print(f'El dataset tiene {df.shape[1]} columnas')
+    print(f'El dataset tiene {df.shape[0]} filas/registros')
+    print("-------------------------------")
+    print(f'El dataset tiene {df.duplicated().sum()} filas duplicadas.')
+    print("-------------------------------")
+    # Suma de valores nulos por columna
+    print("Suma de valores nulos por columna:")
+    print(df.isnull().sum())
+    print("-------------------------------")
+    # Porcentaje de valores nulos por columna
+    print("Porcentaje de valores nulos por columna:")
+    print(round(df.isnull().sum() * 100 / len(df),2))
+    print("-------------------------------")
+    # Tipos de datos de cada columna
+    print("Tipos de datos de cada columna:")   
+    print(df.info())
+    print("-------------------------------")
+    # Estadísticas descriptivas para columnas numéricas
+    print("Estadísticas descriptivas para columnas numéricas:")
+    print(df.describe())
+    print("-------------------------------")
+    # Estadísticas descriptivas para columnas categóricas
+    print("Estadísticas descriptivas para columnas categóricas:")
+    print(df.describe(include='object'))
+
+
+def normalize_string_columns(df):
+    """
+    Normalización de las columnas de tipo string: convertir a minúsculas, eliminar espacios y caracteres especiales.
+    """
+
+    columns_str = df.select_dtypes("object").columns
+
+    for column in columns_str:
+        df[column] = df[column].astype("string").str.lower().str.strip()
+        df[column] = df[column].str.replace(r'[^a-zA-Z0-9 @]', '', regex=True)
+
+    print(df.info())
+
+def normalize_date_columns(df):
+    """
+    Normalización de las columnas de tipo fecha: convertir a formato datetime."""
+    
+    column_date = df.filter(like='date').columns
+    for column in column_date:
+        df[column] = pd.to_datetime(df[column])
+
+
+def delete_nulls(df):
+    """
+    Eliminar filas con valores nulos en columnas específicas.
+    """
+    print("--------------------------------")
+    print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
+
+
+def identify_outliers(df):
+    """
+    Identificación de valores atípicos en columnas numéricas utilizando el método del rango intercuartílico (IQR).
+    """
+    print("Identificación de valores atípicos en columnas numéricas:")
+    numeric_columns = df.select_dtypes(include=['number']).columns
+    for column in numeric_columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+        print(f"Columna: {column}, Número de outliers: {outliers.shape[0]}")
+
+    # Visualización de histogramas y boxplots para cada columna numérica
+    for column in numeric_columns:
+        plt.figure(figsize=(10, 5))
+        plt.hist(df[column], bins=15, edgecolor='black')
+        plt.title(f'Histogram column: {column}')
+        plt.xlabel(column)
+        plt.ylabel('Frecuencia')
+        plt.show()
+
+        plt.boxplot(df[column], orientation='horizontal')
+        plt.title(f'Boxplot column: {column}')
+
+# Función de limpieza para el segundo dataframe
+def preprocess_df(path):
+    """
+    Función de limpieza para el segundo dataframe: carga del dataset, visualización inicial, normalización, eliminación de filas con valores nulos.
+    """
+    df = charge_path(path)
+    first_visualizer(df)
+    normalize_string_columns(df)
+    normalize_date_columns(df)
+    delete_nulls(df)
+    identify_outliers(df)
+
+    return df
+    
+
+
 def preprocess_first_df(df):
     # Normalización strings
     colum_str = ['first_name', 'last_name','email','address','district','city','country']
