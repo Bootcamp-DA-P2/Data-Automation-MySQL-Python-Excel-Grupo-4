@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #charge the path
 def charge_path(path):
@@ -64,6 +65,34 @@ def delete_nulls(df):
     print("--------------------------------")
     print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
 
+
+def identify_outliers(df):
+    """
+    Identificación de valores atípicos en columnas numéricas utilizando el método del rango intercuartílico (IQR).
+    """
+    print("Identificación de valores atípicos en columnas numéricas:")
+    numeric_columns = df.select_dtypes(include=['number']).columns
+    for column in numeric_columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+        print(f"Columna: {column}, Número de outliers: {outliers.shape[0]}")
+
+    # Visualización de histogramas y boxplots para cada columna numérica
+    for column in numeric_columns:
+        plt.figure(figsize=(10, 5))
+        plt.hist(df[column], bins=15, edgecolor='black')
+        plt.title(f'Histogram column: {column}')
+        plt.xlabel(column)
+        plt.ylabel('Frecuencia')
+        plt.show()
+
+        plt.boxplot(df[column], orientation='horizontal')
+        plt.title(f'Boxplot column: {column}')
+
 # Función de limpieza para el segundo dataframe
 def preprocess_df(path):
     """
@@ -74,6 +103,9 @@ def preprocess_df(path):
     normalize_string_columns(df)
     normalize_date_columns(df)
     delete_nulls(df)
+    identify_outliers(df)
+
+    return df
     
 
 
