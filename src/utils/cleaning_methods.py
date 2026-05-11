@@ -35,11 +35,42 @@ def first_visualizer(df):
     print(df.describe(include='object'))
 
 
-# Función de lipieza para el segundo dataframe
+def normalize_string_columns(df):
+    """
+    Normalización de las columnas de tipo string: convertir a minúsculas, eliminar espacios y caracteres especiales.
+    """
+
+    columns_str = df.select_dtypes("object").columns
+
+    for column in columns_str:
+        df[column] = df[column].astype("string").str.lower().str.strip()
+        df[column] = df[column].str.replace(r'[^a-zA-Z0-9 @]', '', regex=True)
+
+    print(df.info())
+
+def normalize_date_columns(df):
+    
+    column_date = df.filter(like='date').columns
+    for column in column_date:
+        df[column] = pd.to_datetime(df[column])
+
+
+def delete_nulls(df):
+    """
+    Eliminar filas con valores nulos en columnas específicas.
+    """
+    print("--------------------------------")
+    print("En este caso no se encuentran valores nulos por lo que no se procede a eliminar filas.")
+
+# Función de limpieza para el segundo dataframe
 def preprocess_df(path):
 
     df = charge_path(path)
     first_visualizer(df)
+    normalize_string_columns(df)
+    normalize_date_columns(df)
+    delete_nulls(df)
+    
 
 
 def preprocess_first_df(df):
