@@ -2,12 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime as dt
-from cleaning_methods import *
+from src.utils.cleaning_methods import charge_path, normalize_string_columns, normalize_date_columns, delete_columns, load_clean_data
 
-
-from cleaning_methods import normalize_string_columns, normalize_date_columns, delete_columns, load_clean_data
-
-def preprocess_first_df(df):
+def preprocess_first_df(path):
+    # Carga de datos
+    df = charge_path(path)
     # Normalización strings
     # Normalización a tipo fecha y string
     df= normalize_date_columns(df)
@@ -58,10 +57,13 @@ def preprocess_first_df(df):
         df[column] = df[column].fillna("missing")
 
     # Exportación de los datos procesados
-    load_clean_data(df, '../output/client-activity-clean.csv')
+    load_clean_data(df, 'output/client-activity-clean.csv')
 
 
-def preprocess_third_df(df):
+def preprocess_third_df(path):
+    # Carga de datos
+    df = charge_path(path)
+
     df.columns = df.columns.str.lower().str.strip().str.replace(' ', '_')
 
     # Normalización a tipo fecha y string
@@ -107,31 +109,20 @@ def preprocess_third_df(df):
     df = delete_columns(df, ['release_year', 'rental_date', 'return_date'])
 
     # Exportación de los datos procesados
-    load_clean_data(df, '../output/global_activity_clients_clean.csv')
-    load_clean_data(df, '../output/client-activity-clean.csv')
+    load_clean_data(df, 'output/global_activity_clients_clean.csv')
 
 
 
 def preprocess_second_df(path):
     #Carga de datos
-    df_original = charge_path(path)
-    df = df_original.copy()
+    df = charge_path(path)
 
     # Normalización a tipo fecha y string
-    normalize_date_columns(df)
-    normalize_string_columns(df)
+    df = normalize_date_columns(df)
+    df = normalize_string_columns(df)
 
     # Eliminación de columnas innecesarias
-    delete_columns(df, ['language'])
-
-    #Identificación de nulos
-    identify_nulls(df)
-
-    #Identificación de otulaiers
-    columns_numeric = df.select_dtypes("number").columns
-    columns_categorical = df.select_dtypes("object").columns
-
-    identify_outliers(df, columns_numeric, columns_categorical)
+    df = delete_columns(df, ['language'])
 
     #Exportación de datos limpios
-    load_clean_data(df, '../output/catalog_film_clean.csv')
+    load_clean_data(df, 'output/catalog_film_clean.csv')
