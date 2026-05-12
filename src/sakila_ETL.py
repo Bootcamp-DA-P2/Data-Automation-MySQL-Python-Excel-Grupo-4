@@ -8,6 +8,7 @@ paths = ['client_activity_rental.csv', 'catalog_film.csv', 'global_activity_clie
 
 query_sql_1 = """
                 select
+                    cu.customer_id as customer_id,
                     LOWER(cu.first_name) AS first_name,
                     LOWER(cu.last_name) AS last_name,
                     LOWER(cu.email) AS email,
@@ -22,13 +23,14 @@ query_sql_1 = """
                     re.return_date,
                     pa.amount,
                     pa.payment_date,
-                    DATEDIFF(re.return_date, re.rental_date) AS rental_duration
+                    DATEDIFF(re.return_date, re.rental_date) AS rental_duration,
+                    re.rental_id as rental_id
                 from customer cu
-                JOIN address ad on cu.address_id = ad.address_id
-                JOIN city ci on ci.city_id = ad.city_id
-                JOIN country co on ci.country_id = co.country_id
-                JOIN rental re on cu.customer_id = re.customer_id
-                JOIN payment pa on re.rental_id = pa.rental_id
+                join address ad on cu.address_id = ad.address_id
+                join city ci on ci.city_id = ad.city_id
+                join country co on ci.country_id = co.country_id
+                join rental re on cu.customer_id = re.customer_id
+                join payment pa on re.rental_id = pa.rental_id
                 WHERE
                     rental_date IS NOT NULL
                     AND return_date IS NOT NULL
@@ -63,30 +65,32 @@ sql_query_2 = """
 """
 
 sql_query_3 = """
-    select
-        lower(fi.title) 'Title',
-        lower(fi.description) 'Description',
-        fi.release_year,
-        fi.rating,
-        lower(ca.name) as 'Category',
-        re.rental_date,
-        re.return_date,
-        pa.amount,
-        pa.payment_date,
-        concat(lower(cu.first_name),' ',lower(cu.last_name)) as 'Full Name',
-        lower(ci.city) as 'City',
-        lower(co.country) as 'Country',
-        DATEDIFF(re.return_date, re.rental_date) AS rental_duration
+        select
+            re.rental_id as rental_id,
+            lower(fi.title) as 'Title',
+            lower(fi.description) as 'Description',
+            fi.release_year,
+            fi.rating,
+            lower(ca.name) as 'Category',
+            re.rental_date,
+            re.return_date,
+            pa.amount,
+            pa.payment_date,
+            concat(lower(cu.first_name),' ',lower(cu.last_name)) as 'Full Name',
+            lower(ci.city) as 'City',
+            lower(co.country) as 'Country',
+            DATEDIFF(re.return_date, re.rental_date) AS rental_duration,
+            inv.inventory_id as inventory_id
     from customer cu
-        join address ad on cu.address_id = ad.address_id
-        join city ci on ci.city_id = ad.city_id
-        join country co on ci.country_id = co.country_id
-        join rental re on cu.customer_id = re.customer_id
-        join payment pa on re.rental_id = pa.rental_id
-        join inventory inv on re.inventory_id = inv.inventory_id
-        join film fi on inv.film_id = fi.film_id
-        join film_category fic on fic.film_id = fi.film_id
-        join category ca on ca.category_id = fic.category_id
+    join address ad on cu.address_id = ad.address_id
+    join city ci on ci.city_id = ad.city_id
+    join country co on ci.country_id = co.country_id
+    join rental re on cu.customer_id = re.customer_id
+    join payment pa on re.rental_id = pa.rental_id
+    join inventory inv on re.inventory_id = inv.inventory_id
+    join film fi on inv.film_id = fi.film_id
+    join film_category fic on fic.film_id = fi.film_id
+    join category ca on ca.category_id = fic.category_id
     WHERE
         rental_date IS NOT NULL
         AND return_date IS NOT NULL
