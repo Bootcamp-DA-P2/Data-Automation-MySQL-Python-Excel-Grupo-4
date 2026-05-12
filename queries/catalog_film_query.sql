@@ -1,6 +1,7 @@
 use sakila;
 
 SELECT 
+	inv.inventory_id,
     LOWER(TRIM(film.title)) AS title,
     LOWER(TRIM(cat.name)) AS category,
     length,
@@ -15,6 +16,7 @@ JOIN language l ON l.language_id = film.language_id
 JOIN inventory inv ON film.film_id = inv.film_id
 JOIN rental r ON inv.inventory_id = r.inventory_id
 GROUP BY 
+	inv.inventory_id,
     film.title,
     cat.name,
       l.name,
