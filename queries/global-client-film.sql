@@ -1,8 +1,9 @@
 use sakila;
 
 select
-	lower(fi.title) 'Title',
-    lower(fi.description) 'Description',
+	re.rental_id as rental_id,
+	lower(fi.title) as 'Title',
+    lower(fi.description) as 'Description',
     fi.release_year,
     fi.rating,
     lower(ca.name) as 'Category',
@@ -13,7 +14,8 @@ select
     concat(lower(cu.first_name),' ',lower(cu.last_name)) as 'Full Name',
     lower(ci.city) as 'City',
     lower(co.country) as 'Country',
-    DATEDIFF(re.return_date, re.rental_date) AS rental_duration
+    DATEDIFF(re.return_date, re.rental_date) AS rental_duration,
+    inv.inventory_id as inventory_id
 from customer cu
 join address ad on cu.address_id = ad.address_id
 join city ci on ci.city_id = ad.city_id

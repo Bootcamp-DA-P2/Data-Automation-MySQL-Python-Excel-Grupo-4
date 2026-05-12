@@ -1,6 +1,7 @@
 use sakila;
 
 select
+	cu.customer_id as customer_id,
 	LOWER(cu.first_name) AS first_name,
 	LOWER(cu.last_name) AS last_name,
 	LOWER(cu.email) AS email,
@@ -15,7 +16,8 @@ select
     re.return_date,
     pa.amount,
     pa.payment_date,
-    DATEDIFF(re.return_date, re.rental_date) AS rental_duration
+    DATEDIFF(re.return_date, re.rental_date) AS rental_duration,
+    re.rental_id as rental_id
 from customer cu
 join address ad on cu.address_id = ad.address_id
 join city ci on ci.city_id = ad.city_id
