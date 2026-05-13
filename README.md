@@ -4,6 +4,9 @@
 ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
 ![Excel](https://img.shields.io/badge/Excel-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)
 
+<img width="1334" height="701" alt="Captura de pantalla 2026-05-13 a las 19 01 29" src="https://github.com/user-attachments/assets/e65e869c-8654-4dbc-84c9-555d29878ff5" />
+
+
 ## 📝 Descripción
 Este proyecto implementa un **enfoque híbrido** para el análisis de datos: utiliza la potencia de **Python** para la extracción, limpieza y pre-procesamiento de datos desde una base de datos **MySQL**, y la flexibilidad de **Excel** para el diseño creativo de dashboards.
 
